@@ -36,7 +36,7 @@ func AcceptRequests() { // API /api/send
 	}
 }
 
-func sendHandler(w http.ResponseWriter, r *http.Request) { // Обработчик, каждого запроса
+func sendHandler(w http.ResponseWriter, r *http.Request) { // Обработчик каждого запроса
 	if r.Method == "POST" { // Если метод POST, в остальных случаях игнорируем
 		data := request{ // Получаем запрос в структуру и добавляем в очередь запросов
 			period_start:            r.FormValue("period_start"),

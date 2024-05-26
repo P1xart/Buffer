@@ -1,7 +1,9 @@
 package model
 
 import (
+	"log"
 	"net/http"
+
 	"github.com/p1xart/bufer/controller"
 	"github.com/p1xart/bufer/view"
 )
@@ -12,7 +14,7 @@ const(
 )
 
 func Bufer() {
-	view.StartBuferFunc() // Обьявляем успешный запуск буфера
+	view.StartBufferFunc() // Обьявляем успешный запуск буфера
 	for {
 		formData, payload, empty := controller.GetRequest() // Получаем информацию о запросе
 		if empty { // Проверяем, есть ли запросы в очереди
@@ -30,5 +32,6 @@ func Bufer() {
 		if err != nil {
 			view.ErrorWriteData(err)
 		}
+		log.Println("Отправлен запрос из очереди")
 	}
 }
