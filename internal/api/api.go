@@ -1,4 +1,4 @@
-package controller
+package api
 
 import (
 	"bytes"
@@ -6,11 +6,10 @@ import (
 	"mime/multipart"
 	"net/http"
 	"sync"
-
-	"github.com/p1xart/bufer/view"
 )
 
 type request struct { // Стуктура запроса на save_fact
+	bearerToken             string
 	period_start            string
 	period_end              string
 	period_key              string
@@ -24,11 +23,11 @@ type request struct { // Стуктура запроса на save_fact
 }
 
 var mutex sync.Mutex = sync.Mutex{} // Создадим мьютекс для избежания одновременной записи в очередь запроса от двух горутин
-var requests []request // Массив экземпляров структур запроса. Массив очереди запросов.
+var requests []request              // Массив экземпляров структур запроса. Массив очереди запросов.
 
-func AcceptRequests() { // API /api/send
-	view.StartHttpHandler()
-	go http.HandleFunc("/api/send", sendHandler) // Вызываем обработчик асинхронно для одновременной обработки нескольких входных запросов
+func AcceptRequests() { // API /api/buffer
+	log.Println("Запущен API")
+	go http.HandleFunc("/api/buffer", sendHandler) // Вызываем обработчик асинхронно для одновременной обработки нескольких входных запросов
 
 	err := http.ListenAndServe(":6700", nil) // Запуск буфера на localhost:6700
 	if err != nil {
@@ -39,6 +38,7 @@ func AcceptRequests() { // API /api/send
 func sendHandler(w http.ResponseWriter, r *http.Request) { // Обработчик каждого запроса
 	if r.Method == "POST" { // Если метод POST, в остальных случаях игнорируем
 		data := request{ // Получаем запрос в структуру и добавляем в очередь запросов
+			bearerToken:             r.Header.Get("Authorization"),
 			period_start:            r.FormValue("period_start"),
 			period_end:              r.FormValue("period_end"),
 			period_key:              r.FormValue("period_key"),
@@ -60,15 +60,14 @@ func sendHandler(w http.ResponseWriter, r *http.Request) { // Обработчи
 	}
 }
 
-func GetRequest() (*multipart.Writer, *bytes.Buffer, bool) { // Метод получения запроса из массива "ожидания"
-	if len(requests) == 0 { // Проверяем, есть ли запросы в очереди. Если нет - вернем пустой Writer (form-data) и false
-		return &multipart.Writer{}, &bytes.Buffer{}, true
+func GetRequest() (string, *bytes.Buffer, string, bool) { // Метод получения запроса из массива "ожидания"
+	if len(requests) == 0 { // Проверяем, есть ли запросы в очереди. Если нет - вернем пустой Content-Type, пустое тело, токен и булево true (Да, пуст)
+		return "", &bytes.Buffer{}, "", true
 	}
 
-	payload := bytes.Buffer{} // Создадим экземпляр полезной нагрузки для ее заполнения (form-data)
+	payload := bytes.Buffer{}               // Создадим экземпляр полезной нагрузки для ее заполнения (form-data)
 	writer := multipart.NewWriter(&payload) // Экземпляр функции, которая и будет писать тело в payload
-	request_body := requests[0] // Берем первый запрос из очереди
-
+	request_body := requests[0]             // Берем первый запрос из очереди
 	writer.WriteField("period_start", request_body.period_start)
 	writer.WriteField("period_end", request_body.period_end)
 	writer.WriteField("period_key", request_body.period_key)
@@ -81,7 +80,7 @@ func GetRequest() (*multipart.Writer, *bytes.Buffer, bool) { // Метод по�
 	writer.WriteField("comment", request_body.comment)
 	err := writer.Close()
 	if err != nil {
-		view.ErrorWriteData(err)
+		log.Println("Error: Запрос не был отправлен.")
 	}
 	mutex.Lock() // Защищаемся от одновременного удаления запроса из очереди ожидания
 	defer mutex.Unlock()
@@ -89,5 +88,5 @@ func GetRequest() (*multipart.Writer, *bytes.Buffer, bool) { // Метод по�
 	requests[len(requests)-1] = request{}
 	requests = requests[:len(requests)-1]
 
-	return writer, &payload, false // Возвращаем тело и булево (Список не пуст)
+	return writer.FormDataContentType(), &payload, request_body.bearerToken, false // Возвращаем Content-Type, тело, bearer token и булево false (нет, не пуст) 
 }

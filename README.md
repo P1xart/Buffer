@@ -1,9 +1,10 @@
-BUFER
+BUFFER
 
-Тестовое задание. Сделано за 4 кружки кофе. Junior Golang. https://hh.ru/resume/0d251099ff0cd8444c0039ed1f757452314643
+Тестовое задание. https://hh.ru/resume/0d251099ff0cd8444c0039ed1f757452314643
 
-Для запуска - скачать, и запустить с помощью ./bufer.
-На вход по адресу localhost:6700 принимает методом POST form-data с телом
+Для запуска ввести "$ go run cmd/buffer/main.go" (Или скомпилировать и запустить командой "$ go build cmd/buffer/main.go && ./cmd/buffer/main")
+
+На http://localhost:6700/api/buffer, методом POST, типом multipart/form-data передать значения:
 period_start:2024-05-01
 period_end:2024-05-31
 period_key:month
@@ -14,3 +15,7 @@ fact_time:2024-05-31
 is_plan:0
 auth_user_id:40
 comment: buffer Last_name
+
+И Bearer Token в заголовке!!!
+
+Я бы мог обрабатывать ответы и в случае неудачи, переотправлять или еще как-то обрабатывать ошибку. Но сказано сильно не заморачиваться. Вам стоит быть внимательным. Микросервис НЕ вернет ошибку в случае отправки невалидного запроса, а просто пропустит и продолжит работать.
