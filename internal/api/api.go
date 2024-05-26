@@ -88,5 +88,5 @@ func GetRequest() (string, *bytes.Buffer, string, bool) { // Метод полу
 	requests[len(requests)-1] = request{}
 	requests = requests[:len(requests)-1]
 
-	return writer.FormDataContentType(), &payload, request_body.bearerToken, false // Возвращаем Content-Type, тело, bearer token и булево false (нет, не пуст) 
+	return writer.FormDataContentType(), &payload, request_body.bearerToken, false // Возвращаем Content-Type, тело, bearer token и булево false (нет, не пуст)
 }
