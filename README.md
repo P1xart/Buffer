@@ -2,7 +2,7 @@
 
 Тестовое задание. https://hh.ru/resume/0d251099ff0cd8444c0039ed1f757452314643
 
-Для запуска ввести "$ go run cmd/buffer/main.go" (Или скомпилировать и запустить командой "$ go build cmd/buffer/main.go && ./cmd/buffer/main")
+Для запуска ввести "$ go run cmd/buffer/main.go" или с помощью docker "$ docker build --tag buffer &&docker run -p 6700:6700 buffer"
 
 На http://localhost:6700/api/buffer, методом POST, типом multipart/form-data передать значения:  
 period_start:2024-05-01  
