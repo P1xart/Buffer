@@ -6,6 +6,8 @@ import (
 	"mime/multipart"
 	"net/http"
 	"sync"
+	"os"
+	
 )
 
 type request struct { // Стуктура запроса на save_fact
@@ -49,6 +51,14 @@ func sendHandler(w http.ResponseWriter, r *http.Request) { // Обработчи
 			is_plan:                 r.FormValue("is_plan"),
 			auth_user_id:            r.FormValue("auth_user_id"),
 			comment:                 r.FormValue("comment"),
+		}
+		bearToken, exists := os.LookupEnv("TOKEN")
+		if !exists {
+			log.Fatal("Error: Не получается найти переменную TOKEN в среде окружения")
+		}
+		if data.bearerToken != bearToken {
+			w.WriteHeader(401) // Юзер не авторизован, запрос отклоняется для записи.
+			return
 		}
 		mutex.Lock() // Защищаем массив от одновременной записи
 		defer mutex.Unlock()

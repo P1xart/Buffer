@@ -16,7 +16,7 @@ func Buffer() {
 		}
 		request, err := http.NewRequest("POST", "https://development.kpi-drive.ru/_api/facts/save_fact", payload) // Создаем новый запрос
 		if err != nil {
-			log.Println("Error: Запрос не был отправлен.")
+			log.Println("Error: Запрос не был инцициализован.")
 		}
 
 		request.Header.Add("Authorization", bearerToken) // Передаем Bearer token в заголовок
@@ -24,11 +24,11 @@ func Buffer() {
 		client := http.Client{}                          // Создаем клиент
 		response, err := client.Do(request)              // Передаем в клиент запрос и отправляем, А ПОСЛЕ ЖДЕМ ОТВЕТА, что означает - записано в бд.
 		if err != nil {
-			log.Println("Error: Запрос не был отправлен.")
+			log.Println("Error: Ошибка при отправке запроса или получении ответа.")
 		}
 		b, err := io.ReadAll(response.Body)
 		if err != nil {
-			log.Println("Error: Запрос не был отправлен.")
+			log.Println("Error: Тело ответа не может быть прочитано.")
 		}
 		log.Println("Отправлен запрос из очереди\n", string(b))
 	}

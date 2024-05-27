@@ -2,7 +2,13 @@
 
 Тестовое задание. https://hh.ru/resume/0d251099ff0cd8444c0039ed1f757452314643
 
-Для запуска ввести "$ go run cmd/buffer/main.go" или с помощью docker "$ docker build --tag buffer && docker run -p 6700:6700 buffer"
+Для запуска:  
+1) В корне создать файл .env и поместить туда Bearer token как "TOKEN=Bearer your_token", например "TOKEN=Bearer 124f31d1a7ad7f89qgdxg8782bcv192"
+2) Загрузить зависимости с помощью "$ go mod download"  
+3) Ввети команду "$ go run cmd/buffer/main.go" 
+   ИЛИ использовать docker  
+1) Собрать образ "$ docker build --tag buffer"  
+2) Запустить контейнер "docker run -p 6700:6700 buffer"
 
 На http://localhost:6700/api/buffer, методом POST, типом multipart/form-data передать значения:  
 period_start:2024-05-01  
