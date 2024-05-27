@@ -7,8 +7,8 @@
 2) Загрузить зависимости с помощью "$ go mod download"  
 3) Ввети команду "$ go run cmd/buffer/main.go"   
 ИЛИ использовать docker  
-4) Собрать образ "$ docker build --tag buffer"  
-5) Запустить контейнер "docker run -p 6700:6700 buffer"
+1) Собрать образ "$ docker build --tag buffer"  
+2) Запустить контейнер "$ docker run -p 6700:6700 buffer"
 
 На http://localhost:6700/api/buffer, методом POST, типом multipart/form-data передать значения:  
 period_start:2024-05-01  
@@ -23,6 +23,6 @@ auth_user_id:40
 comment: buffer Last_name  
 
 И Bearer Token в заголовке, иначе вернет 401!!!  
-Authorization:Bearer <token>
+Authorization:Bearer t0k3n
 
-Я бы мог обрабатывать ответы и в случае неудачи, переотправлять или еще как-то обрабатывать ошибку. Но сказано сильно не заморачиваться. Вам стоит быть внимательным. Микросервис НЕ вернет ошибку в случае отправки невалидного запроса, а просто пропустит и продолжит работать.
+Передаваемые данные не валидируются из-за недостатка информации. Только Bearer Token
