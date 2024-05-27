@@ -63,7 +63,6 @@ func sendHandler(w http.ResponseWriter, r *http.Request) { // Обработчи
 		mutex.Lock() // Защищаем массив от одновременной записи
 		defer mutex.Unlock()
 		requests = append(requests, data) // Запись в массив запросов
-		log.Println(requests)
 		w.WriteHeader(201) // Успешно обработано, но ничего не вернем в ответе
 	} else {
 		w.WriteHeader(405) // Все запросы кроме POST - method not allowed
