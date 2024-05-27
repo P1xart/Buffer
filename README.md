@@ -7,8 +7,8 @@
 2) Загрузить зависимости с помощью "$ go mod download"  
 3) Ввети команду "$ go run cmd/buffer/main.go"   
 ИЛИ использовать docker  
-1) Собрать образ "$ docker build --tag buffer"  
-2) Запустить контейнер "$ docker run -p 6700:6700 buffer"
+I) Собрать образ "$ docker build -t buffer ."  
+II) Запустить контейнер "$ docker run -p 6700:6700 buffer"
 
 На http://localhost:6700/api/buffer, методом POST, типом multipart/form-data передать значения:  
 period_start:2024-05-01  
