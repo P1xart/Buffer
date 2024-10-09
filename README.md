@@ -1,7 +1,5 @@
 # BUFFER #
 
-Тестовое задание. https://hh.ru/resume/0d251099ff0cd8444c0039ed1f757452314643
-
 Для запуска:  
 В корне создать файл .env и поместить туда Bearer token как "TOKEN=Bearer your_token", например "TOKEN=Bearer 124f31d1a7ad7f89qgdxg8782bcv192"  
 Запустить вручную
